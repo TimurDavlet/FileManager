@@ -26,7 +26,16 @@ export const up = (currentDir, args) => {
 export const cd = async (currentDir, args) => {
     checkOneArg(args);
     try {
-        const startPath = currentDir.length === 1 && currentDir[0] === '' ? '/' : currentDir.join(path.sep);
+        let startPath = '';
+        if (currentDir.length === 1) {
+            if (currentDir[0] === '') {
+                startPath = '/';
+            } else {
+                startPath = `C:\\`;
+            }
+        } else {
+            startPath = currentDir.join(path.sep);
+        }
         const newPath = path.resolve(startPath, args[0]);
         const stats = await stat(newPath);
         const isFile = stats.isFile();
