@@ -52,9 +52,12 @@ export const cd = async (currentDir, args) => {
 export const ls = async (currentDir, args) => {
     try {
         checkNotArg(args);
-        const dir = currentDir.join(path.sep);
+        const dir = currentDir.length === 1 && currentDir[0] === '' ? '/' : currentDir.join(path.sep);
+        console.log(dir)
         const files = await readdir(dir);
-        const tableList = await files.reduce(async (acc, element) => {
+        const deletePrivateFiles = files.filter(el => el.slice(0, 1) !== '.');
+        console.log(files)
+        const tableList = await deletePrivateFiles.reduce(async (acc, element) => {
             const accum = await acc;
             const path = `${dir}/${element}`;
             const stats = await stat(path);
